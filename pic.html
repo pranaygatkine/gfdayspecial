@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chronicles of Our Eerie Affection - Photo Gallery</title>
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-dark: #1a000d; /* Very dark background */
+            --secondary-mist: #33001a; /* Dark plum */
+            --accent-glow: #ff4500; /* Orange-red for eerie glow */
+            --text-light: #fbecec; /* Pale pink for contrast */
+            --text-highlight: #ff69b4; /* A touch of original pink for 'love' */
+            --card-bg: rgba(26, 0, 13, 0.85); /* Darker card background */
+            --card-border: rgba(128, 0, 64, 0.5); /* Darker border */
+            --tooltip-bg: rgba(128, 0, 64, 0.9); /* Dark pink for tooltip */
+            --button-bg: #4a0033; /* Deep plum for button */
+            --button-hover-bg: #800040; /* Darker, desaturated pink for button hover */
+            --placeholder-gradient-start: #4a0033;
+            --placeholder-gradient-end: #660033;
+            --modal-caption-bg: rgba(0, 0, 0, 0.7); /* Background for modal caption */
+        }
+
+        /* Basic Reset & Box Sizing */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body & Overall Layout */
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-mist) 100%);
+            min-height: 100vh;
+            position: relative;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23ff69b4" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>') 12 12, auto; /* Custom heart cursor */
+            padding: 20px; /* General padding to prevent content from touching edges */
+            overflow-x: hidden; /* Prevent horizontal scroll due to animations */
+            /* Removed filter transition from body, it will be applied to .container now */
+        }
+
+        /* Blur effect on main content when modal is open */
+        .container.modal-active { /* Using .container for blur, not body */
+            filter: blur(5px) brightness(0.8);
+            transition: filter 0.3s ease-out; /* Smooth transition for blur */
+            pointer-events: none; /* Prevent interaction with blurred background */
+        }
+
+        /* --- Floating Eerie Elements Background --- */
+        .floating-eerie {
+            position: fixed; /* Keep elements fixed in viewport */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.15;
+            animation: floatGlow 8s ease-in-out infinite alternate;
+            pointer-events: none;
+            z-index: 1; /* Behind content */
+            overflow: hidden; /* Ensure elements don't spill out */
+        }
+
+        .eerie-element {
+            position: absolute;
+            font-size: clamp(1.5rem, 4vw, 3rem);
+            color: var(--accent-glow);
+            filter: blur(0.5px);
+            animation: spinFloat 12s linear infinite, pulseOpacity 4s infinite alternate;
+        }
+
+        .eerie-element:nth-child(even) { animation-delay: -3s; animation-duration: 10s; }
+        .eerie-element:nth-child(odd) { animation-delay: -6s; animation-duration: 14s; }
+
+        @keyframes floatGlow {
+            0%, 100% { filter: drop-shadow(0 0 5px rgba(255, 69, 0, 0.4)); }
+            50% { filter: drop-shadow(0 0 15px rgba(255, 69, 0, 0.8)); }
+        }
+
+        @keyframes spinFloat {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(20px, -15px) rotate(45deg); }
+            50% { transform: translate(0, -30px) rotate(90deg); }
+            75% { transform: translate(-20px, -15px) rotate(135deg); }
+            100% { transform: translate(0, 0) rotate(180deg); }
+        }
+
+        @keyframes pulseOpacity {
+            0%, 100% { opacity: 0.15; }
+            50% { opacity: 0.3; }
+        }
+
+        /* Main Container & Header */
+        .container {
+            max-width: 1200px;
+            width: 100%; /* Ensure it takes full width on smaller screens */
+            margin: 0 auto;
+            padding: clamp(2rem, 5vw, 3rem) clamp(1rem, 4vw, 2rem); /* Responsive padding */
+            position: relative;
+            z-index: 10;
+            min-height: calc(100vh - 40px); /* Adjust based on body padding */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* Pushes button to bottom */
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: clamp(2rem, 6vw, 3rem); /* Responsive margin */
+        }
+
+        .title {
+            font-family: 'Creepster', cursive;
+            font-size: clamp(3rem, 10vw, 5rem); /* Adjusted clamp for mobile */
+            color: var(--accent-glow);
+            margin-bottom: clamp(0.8rem, 2vw, 1rem); /* Responsive margin */
+            text-shadow: 0 0 15px var(--accent-glow), 0 0 25px rgba(255, 69, 0, 0.6);
+            animation: textFlicker 2s infinite alternate;
+        }
+
+        @keyframes textFlicker {
+            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+                text-shadow: 0 0 15px var(--accent-glow), 0 0 25px rgba(255, 69, 0, 0.6);
+                opacity: 1;
+            }
+            20%, 24%, 55% {
+                text-shadow: none;
+                opacity: 0.8;
+            }
+        }
+
+        .subtitle {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(1.2rem, 4vw, 1.8rem); /* Adjusted clamp for mobile */
+            color: var(--text-light);
+            font-weight: 400;
+            opacity: 0.9;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Desktop Grid Layout */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Min card width for mobile */
+            gap: clamp(1.5rem, 4vw, 2.5rem); /* Responsive gap */
+            margin-bottom: clamp(2rem, 6vw, 3rem); /* Responsive margin */
+            flex-grow: 1; /* Allows grid to take up available space */
+            align-content: start; /* Align content to the top within grid */
+        }
+
+        /* Mobile Carousel Layout */
+        .gallery-carousel {
+            display: none; /* Hidden by default, shown on mobile */
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            padding-bottom: clamp(1rem, 3vw, 1.5rem); /* Space for scrollbar */
+            margin-bottom: clamp(2rem, 6vw, 3rem); /* Responsive margin */
+            -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+            flex-grow: 1; /* Allows carousel to take up available space */
+        }
+
+        .carousel-container {
+            display: flex;
+            gap: clamp(1.5rem, 4vw, 2rem); /* Responsive gap */
+            padding: 0 clamp(0.5rem, 2vw, 1rem); /* Responsive padding */
+        }
+
+        .memory-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: clamp(1rem, 3vw, 1.2rem); /* Responsive padding */
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            min-width: clamp(240px, 60vw, 280px); /* Responsive min-width for cards */
+            scroll-snap-align: center;
+            border: 1px solid var(--card-border);
+            animation: fadeInCard 0.8s ease-out forwards;
+            opacity: 0;
+            display: flex; /* Flex container for content */
+            flex-direction: column; /* Stack image and message */
+        }
+
+        /* Staggered animation for cards */
+        .memory-card:nth-child(1) { animation-delay: 0.2s; }
+        .memory-card:nth-child(2) { animation-delay: 0.4s; }
+        .memory-card:nth-child(3) { animation-delay: 0.6s; }
+        .memory-card:nth-child(4) { animation-delay: 0.8s; }
+        .memory-card:nth-child(5) { animation-delay: 1.0s; }
+        .memory-card:nth-child(6) { animation-delay: 1.2s; }
+        .memory-card:nth-child(7) { animation-delay: 1.4s; }
+        .memory-card:nth-child(8) { animation-delay: 1.6s; }
+
+
+        @keyframes fadeInCard {
+            from { opacity: 0; transform: translateY(30px) scale(0.9); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .memory-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(255, 69, 0, 0.3); /* Eerie glow on hover */
+            border-color: var(--accent-glow);
+        }
+
+        .memory-image {
+            width: 100%;
+            height: clamp(180px, 40vw, 220px); /* Responsive height for images */
+            background: linear-gradient(45deg, var(--placeholder-gradient-start), var(--placeholder-gradient-end));
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: clamp(3rem, 8vw, 3.5rem); /* Responsive font for placeholder emoji */
+            margin-bottom: clamp(0.8rem, 2vw, 1rem); /* Responsive margin */
+            position: relative;
+            overflow: hidden;
+            background-size: cover;
+            background-position: top; /* Ensures image starts from the top */
+            background-repeat: no-repeat;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5); /* Inner shadow for depth */
+            filter: brightness(85%); /* Slightly dimmed for eerie feel */
+            transition: filter 0.3s ease;
+            flex-shrink: 0; /* Prevent image from shrinking */
+        }
+
+        .memory-card:hover .memory-image {
+            filter: brightness(100%) saturate(1.1); /* Brighter and more vibrant on hover */
+        }
+
+        /* Placeholder styling when no image is set */
+        .memory-image.placeholder::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 69, 0, 0.3), transparent); /* Eerie shimmer */
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .memory-message {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(0.95rem, 3vw, 1.1rem); /* Adjusted clamp for mobile */
+            color: var(--text-light);
+            text-align: center;
+            min-height: clamp(40px, 10vw, 45px); /* Responsive min-height for message */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1.4;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+            flex-grow: 1; /* Allow message to take up remaining space */
+        }
+
+        /* Tooltip for desktop (now a hidden message revealed on hover) */
+        .tooltip {
+            position: absolute;
+            bottom: calc(100% + 10px); /* Position above the card, clearly visible */
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--tooltip-bg);
+            color: var(--text-light);
+            padding: clamp(0.6rem, 2vw, 0.8rem) clamp(1rem, 3vw, 1.2rem); /* More padding */
+            border-radius: 15px;
+            font-size: clamp(0.8rem, 2.5vw, 0.9rem); /* Slightly larger font for readability */
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease-in-out;
+            white-space: normal; /* Allow text to wrap */
+            text-align: center;
+            z-index: 100;
+            border: 1px solid rgba(255, 69, 0, 0.3); /* Subtle glow border */
+            width: fit-content; /* Adjust width to content */
+            max-width: 90%; /* Prevent overflow on smaller screens */
+        }
+
+        .memory-card:hover .tooltip {
+            opacity: 1;
+            bottom: calc(100% + 5px); /* Lift slightly higher on hover, closer to cursor */
+        }
+
+        .cta-button {
+            display: block;
+            margin: clamp(2rem, 8vw, 3rem) auto clamp(0.5rem, 2vw, 1rem) auto; /* Responsive margin */
+            padding: clamp(1rem, 3.5vw, 1.2rem) clamp(2rem, 7vw, 3rem); /* Responsive padding */
+            background: var(--button-bg);
+            color: var(--text-light);
+            text-decoration: none;
+            border-radius: 50px;
+            font-family: 'Cinzel', serif;
+            font-weight: 600;
+            font-size: clamp(1.1rem, 3.5vw, 1.4rem); /* Adjusted clamp for mobile */
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+            max-width: 400px; /* Adjusted max-width to allow more text */
+            border: 2px solid var(--accent-glow);
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+            white-space: normal; /* ALLOW TEXT TO WRAP */
+            word-wrap: break-word; /* Ensure long words break */
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(255, 69, 0, 0.4);
+            background: var(--button-hover-bg);
+            border-color: var(--text-highlight);
+        }
+
+        /* Floating spectral effects on hover/tap */
+        .spectral-wisp {
+            position: fixed; /* Fixed for scrolling background */
+            animation: floatWisp 3s linear forwards;
+            pointer-events: none;
+            font-size: clamp(1rem, 3vw, 1.2rem); /* Responsive font size */
+            opacity: 0;
+            color: var(--text-highlight); /* A touch of pink */
+            text-shadow: 0 0 5px var(--text-highlight);
+            filter: blur(0.2px);
+            z-index: 1000; /* Ensure it's above other elements */
+        }
+
+        @keyframes floatWisp {
+            0% { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); }
+            100% { opacity: 0; transform: translateY(-80px) scale(0.8) rotate(30deg); }
+        }
+
+        /* Custom scrollbar for carousel */
+        .gallery-carousel::-webkit-scrollbar {
+            height: clamp(6px, 1.5vw, 8px); /* Responsive scrollbar height */
+        }
+
+        .gallery-carousel::-webkit-scrollbar-track {
+            background: rgba(255, 69, 0, 0.1); /* Eerie track */
+            border-radius: 4px;
+        }
+
+        .gallery-carousel::-webkit-scrollbar-thumb {
+            background: rgba(255, 69, 0, 0.5); /* Eerie thumb */
+            border-radius: 4px;
+        }
+
+        .gallery-carousel::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 69, 0, 0.7);
+        }
+
+        /* Media queries for displaying correct gallery */
+        @media (min-width: 769px) { /* Desktop styles for larger screens */
+            .gallery-grid {
+                display: grid; /* Show grid on desktop */
+            }
+            .gallery-carousel {
+                display: none; /* Hide carousel on desktop */
+            }
+        }
+
+        @media (max-width: 768px) { /* Mobile styles for smaller screens */
+            .gallery-grid {
+                display: none; /* Hide grid on mobile */
+            }
+            .gallery-carousel {
+                display: block; /* Show carousel on mobile */
+                padding-left: clamp(10px, 3vw, 20px); /* Adjust padding for mobile carousel */
+                padding-right: clamp(10px, 3vw, 20px);
+            }
+            .carousel-container {
+                padding: 0; /* Remove padding from inner carousel container */
+            }
+            /* Mobile tap effect - adjusted to be more subtle for tap */
+            .memory-card.tapped {
+                transform: scale(0.98);
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            }
+            /* Show tooltip as a permanent message below the memory message on mobile */
+            .memory-card .tooltip {
+                display: block; /* Show on mobile */
+                position: static; /* Remove absolute positioning */
+                transform: none; /* Remove transform */
+                opacity: 1; /* Always visible */
+                margin-top: 10px; /* Space from main message */
+                font-size: clamp(0.7rem, 2vw, 0.85rem); /* Slightly smaller for mobile */
+                padding: clamp(0.4rem, 1.5vw, 0.6rem) clamp(0.8rem, 2.5vw, 1rem);
+                border: none; /* Remove border */
+                background: none; /* Remove background */
+                color: var(--text-highlight); /* Use text highlight color */
+                text-shadow: 0 0 5px rgba(255, 105, 180, 0.5); /* Subtle pink glow */
+                animation: pulseText 2s infinite alternate; /* Subtle pulse */
+                white-space: normal; /* Allow text wrapping */
+            }
+
+            @keyframes pulseText {
+                0%, 100% { opacity: 0.9; }
+                50% { opacity: 0.7; }
+            }
+        }
+
+        /* --- Fullscreen Image Modal --- */
+        .image-modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 2000; /* High z-index to be on top */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden; /* Prevent body scroll when modal is open */
+            background-color: rgba(0, 0, 0, 0.7); /* Dark overlay, can be slightly transparent */
+            /* backdrop-filter: blur(10px); Removed from here, moved to .container.modal-active */
+            align-items: center;
+            justify-content: center;
+            animation: fadeInOverlay 0.3s ease-out forwards;
+            will-change: opacity; /* Optimize for animation */
+        }
+
+        .image-modal.open {
+            display: flex; /* Show when open */
+        }
+
+        .modal-content-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            padding: clamp(20px, 5vw, 40px); /* Responsive padding around the image */
+        }
+
+        .modal-content {
+            /* Keep original size behavior */
+            max-width: 90vw; /* Limit max width to something sensible for original size feel */
+            max-height: 90vh; /* Limit max height for original size feel */
+            width: auto; /* Allow image to determine its width */
+            height: auto; /* Allow image to determine its height */
+            display: block;
+            margin: auto;
+            border: 3px solid var(--accent-glow); /* Glowing border */
+            border-radius: 10px;
+            box-shadow: 0 0 40px rgba(255, 69, 0, 0.8); /* Intense glow */
+            animation: horrorReveal 0.8s ease-out; /* Only horrorReveal, removed zoomIn */
+            object-fit: contain; /* Ensures entire image is visible within bounds */
+            position: relative; /* Needed for loading animation/placeholders */
+            background: linear-gradient(45deg, var(--placeholder-gradient-start), var(--placeholder-gradient-end)); /* Background during load */
+            background-size: cover;
+            background-position: top; /* Consistent with gallery images */
+            filter: none; /* Ensure the image itself is NOT blurred or desaturated */
+        }
+
+        /* Show loading spinner or placeholder for modal image before it fully loads */
+        .modal-content:not([src=""]) {
+            background: none;
+            box-shadow: none; /* remove placeholder shadow */
+        }
+
+        .modal-caption {
+            color: var(--text-light);
+            font-family: 'Cinzel', serif;
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            text-align: center;
+            margin-top: 15px;
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.6);
+            padding: 8px 15px;
+            background-color: var(--modal-caption-bg);
+            border-radius: 8px;
+            max-width: 80%; /* Limit width of caption */
+            word-wrap: break-word; /* Allow long words to break */
+        }
+
+        .close-button {
+            position: absolute;
+            top: clamp(10px, 3vw, 20px);
+            right: clamp(15px, 4vw, 25px);
+            color: var(--text-light);
+            font-size: clamp(2.5rem, 7vw, 3.5rem); /* Responsive size */
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s ease, transform 0.3s ease;
+            text-shadow: 0 0 10px var(--accent-glow);
+            z-index: 2001; /* Above modal content */
+            padding: 5px; /* Increase clickable area */
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background for visibility */
+            border-radius: 50%;
+            line-height: 1; /* For better centering of X */
+            width: clamp(40px, 10vw, 50px); /* Responsive button size */
+            height: clamp(40px, 10vw, 50px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--accent-glow);
+        }
+
+        .close-button:hover,
+        .close-button:focus {
+            color: var(--accent-glow);
+            transform: rotate(90deg);
+            outline: none;
+            background-color: rgba(255, 69, 0, 0.2); /* Subtle hover effect */
+        }
+
+        /* Animations for modal */
+        @keyframes fadeInOverlay {
+            from { opacity: 0; } /* Only opacity for the overlay */
+            to { opacity: 1; }
+        }
+
+        /* Removed zoomIn from modal-content, now only horrorReveal is active */
+        /* @keyframes zoomIn {
+            from { transform: scale(0.7); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        } */
+
+        /* Horror reveal animation for modal images (modified) */
+        @keyframes horrorReveal {
+            0% { clip-path: inset(0 100% 0 0); transform: scale(0.8); opacity: 0.5; } /* Start smaller and less opaque */
+            100% { clip-path: inset(0 0 0 0); transform: scale(1); opacity: 1; } /* End at original size, full opacity */
+        }
+
+        @keyframes fadeOutOverlay {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+
+        @keyframes zoomOut {
+            from { transform: scale(1); opacity: 1; }
+            to { transform: scale(0.7); opacity: 0; }
+        }
+
+        /* New hover effect for memory cards to display horror love emojis */
+        .memory-card::after {
+            content: var(--hover-emoji-content, ''); /* Use custom property for content */
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            font-size: clamp(3rem, 8vw, 4rem);
+            opacity: 0;
+            pointer-events: none;
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+            color: var(--text-highlight);
+            text-shadow: 0 0 10px var(--text-highlight);
+            z-index: 50; /* Above image, below tooltip */
+        }
+
+        .memory-card:hover::after {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+            animation: pulseEmoji 0.8s infinite alternate; /* Optional pulse for emoji */
+        }
+
+        @keyframes pulseEmoji {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.8; }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-eerie">
+        <div class="eerie-element" style="top: 10%; left: 5%;">🦇</div>
+        <div class="eerie-element" style="top: 20%; right: 10%;">🕷️</div>
+        <div class="eerie-element" style="top: 40%; left: 15%;">🖤</div>
+        <div class="eerie-element" style="top: 60%; right: 20%;">🥀</div>
+        <div class="eerie-element" style="top: 80%; left: 10%;">👻</div>
+        <div class="eerie-element" style="top: 5%; right: 40%;">🕯️</div>
+        <div class="eerie-element" style="top: 30%; left: 70%;">🔮</div>
+        <div class="eerie-element" style="top: 75%; right: 30%;">💀</div>
+        <div class="eerie-element" style="top: 45%; left: 80%;">✨</div>
+        <div class="eerie-element" style="top: 90%; right: 50%;">💖</div>
+    </div>
+
+    <div class="container" id="mainContent">
+        <div class="header">
+            <h1 class="title">Memories with My Haunted Love 👻❤️</h1>
+            <p class="subtitle">Every pic... a spooky but sweet memory with you 💕</p>
+        </div>
+
+        <div class="gallery-grid" id="desktopGallery">
+            <div class="memory-card">
+                <div class="tooltip">That cold night... your bony touch warmed my soul 🔥💀</div>
+                <div class="memory-image placeholder" data-image-url="bhootni1.png">👁️‍🗨️</div>
+                <div class="memory-message">Our first spooky moment together</div>
+            </div>
+            <div class="memory-card">
+                <div class="tooltip">Even in death... your smile brings me to life 👻❤️</div>
+                <div class="memory-image placeholder" data-image-url="bhootni2.png">👻</div>
+                <div class="memory-message">My cute ghost girl moment</div>
+            </div>
+            <div class="memory-card">
+                <div class="tooltip">That moonlit spell... bound me to you forever 🌕✨</div>
+                <div class="memory-image placeholder" data-image-url="bhootni3.png">🕷️</div>
+                <div class="memory-message">Magic under the dark sky</div>
+            </div>
+            <div class="memory-card">
+                <div class="tooltip">One kiss... and I knew I’d haunt you forever 🩸👄</div>
+                <div class="memory-image placeholder" data-image-url="bhootni4.png">🍷</div>
+                <div class="memory-message">When forever began</div>
+            </div>
+            <div class="memory-card">
+                <div class="tooltip">Darkness feared your glow... and so did I 🦇🖤</div>
+                <div class="memory-image placeholder" data-image-url="bhootni5.png">🦇</div>
+                <div class="memory-message">You were glowing... even in the dark</div>
+            </div>
+            <div class="memory-card">
+                <div class="tooltip">A ghostly vow... sealed with blood and love ⛓️🥀</div>
+                <div class="memory-image placeholder" data-image-url="bhootni6.png">⛓️</div>
+                <div class="memory-message">Our forever promise</div>
+            </div>
+            <div class="memory-card">
+                <div class="tooltip">Even cold rain couldn’t melt our burning love 🌧️💘</div>
+                <div class="memory-image placeholder" data-image-url="bhootni7.png">🕯️</div>
+                <div class="memory-message">Frozen in my heart</div>
+            </div>
+            <div class="memory-card">
+                <div class="tooltip">Even death couldn't kill what we started 🔥💔💀</div>
+                <div class="memory-image placeholder" data-image-url="bhootni8.png">🩸</div>
+                <div class="memory-message">This love is dark... but pure</div>
+            </div>
+        </div>
+
+        <div class="gallery-carousel" id="mobileGallery">
+            <div class="carousel-container">
+                <div class="memory-card">
+                    <div class="memory-image placeholder" data-image-url="bhootni1.png">👁️‍🗨️</div>
+                    <div class="memory-message">Our first spooky moment together</div>
+                    <div class="tooltip">That cold night... your bony touch warmed my soul 🔥💀</div>
+                </div>
+                <div class="memory-card">
+                    <div class="memory-image placeholder" data-image-url="bhootni2.png">👻</div>
+                    <div class="memory-message">My cute ghost girl moment</div>
+                    <div class="tooltip">Even in death... your smile brings me to life 👻❤️</div>
+                </div>
+                <div class="memory-card">
+                    <div class="memory-image placeholder" data-image-url="bhootni3.png">🕷️</div>
+                    <div class="memory-message">Magic under the dark sky</div>
+                    <div class="tooltip">That moonlit spell... bound me to you forever 🌕✨</div>
+                </div>
+                <div class="memory-card">
+                    <div class="memory-image placeholder" data-image-url="bhootni4.png">🍷</div>
+                    <div class="memory-message">When forever began</div>
+                    <div class="tooltip">One kiss... and I knew I’d haunt you forever 🩸👄</div>
+                </div>
+                <div class="memory-card">
+                    <div class="memory-image placeholder" data-image-url="bhootni5.png">🦇</div>
+                    <div class="memory-message">You were glowing... even in the dark</div>
+                    <div class="tooltip">Darkness feared your glow... and so did I 🦇🖤</div>
+                </div>
+                <div class="memory-card">
+                    <div class="memory-image placeholder" data-image-url="bhootni6.png">⛓️</div>
+                    <div class="memory-message">Our forever promise</div>
+                    <div class="tooltip">A ghostly vow... sealed with blood and love ⛓️🥀</div>
+                </div>
+                <div class="memory-card">
+                    <div class="memory-image placeholder" data-image-url="bhootni7.png">🕯️</div>
+                    <div class="memory-message">Frozen in my heart</div>
+                    <div class="tooltip">Even cold rain couldn’t melt our burning love 🌧️💘</div>
+                </div>
+                <div class="memory-card">
+                    <div class="memory-image placeholder" data-image-url="bhootni8.png">🩸</div>
+                    <div class="memory-message">This love is dark... but pure</div>
+                    <div class="tooltip">Even death couldn't kill what we started 🔥💔💀</div>
+                </div>
+            </div>
+        </div>
+
+        <a href="last.html" class="cta-button">Wanna Know the Final Spell? ➡️</a>
+
+    </div>
+
+    <div id="imageModal" class="image-modal">
+        <span class="close-button" id="closeModalBtn">&times;</span>
+        <div class="modal-content-wrapper">
+            <img class="modal-content" id="modalImage" src="" alt="Enlarged gallery image">
+            <div class="modal-caption" id="modalCaption"></div>
+        </div>
+    </div>
+
+    <script>
+        // --- Fullscreen Image Modal Functionality ---
+        const imageModal = document.getElementById('imageModal');
+        const modalImage = document.getElementById('modalImage');
+        const modalCaption = document.getElementById('modalCaption');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const body = document.body;
+        const mainContent = document.getElementById('mainContent'); // Get the main content container
+
+        // Available horror/love emojis for hover effect
+        const horrorLoveEmojis = ['❤️‍🩹', '🖤', '💔', '🥀', '👻', '💀', '🩸', '🕷️', '🦇'];
+
+        // Function to create a random horror-love emoji
+        function getRandomHorrorLoveEmoji() {
+            return horrorLoveEmojis[Math.floor(Math.random() * horrorLoveEmojis.length)];
+        }
+
+        // Select all image elements that could be clicked to open the modal
+        const clickableImageElements = document.querySelectorAll('.memory-image');
+
+        clickableImageElements.forEach(imageElement => {
+            if (imageElement.dataset.imageUrl) {
+                imageElement.addEventListener('click', () => {
+                    const imageUrl = imageElement.dataset.imageUrl;
+                    const imageCaption = imageElement.closest('.memory-card').querySelector('.tooltip').textContent;
+
+                    modalImage.src = imageUrl;
+                    modalCaption.textContent = imageCaption;
+                    imageModal.classList.add('open'); // Show modal with transition
+                    mainContent.classList.add('modal-active'); // Apply blur to main content
+                });
+            }
+        });
+
+        closeModalBtn.addEventListener('click', () => {
+            imageModal.classList.remove('open');
+            mainContent.classList.remove('modal-active'); // Remove blur from main content
+        });
+
+        // Close modal when clicking outside the image content
+        imageModal.addEventListener('click', (event) => {
+            if (event.target === imageModal) {
+                imageModal.classList.remove('open');
+                mainContent.classList.remove('modal-active');
+            }
+        });
+
+        // --- Mobile tap functionality (for spectral wisps, separate from modal click) ---
+        const mobileCards = document.querySelectorAll('#mobileGallery .memory-card');
+
+        mobileCards.forEach(card => {
+            card.addEventListener('click', function(event) {
+                if (event.target.classList.contains('memory-image')) {
+                    return;
+                }
+
+                this.classList.add('tapped');
+                setTimeout(() => this.classList.remove('tapped'), 150);
+
+                if (!imageModal.classList.contains('open')) {
+                    createSpectralWisp(this); // Create ghostly effect on tap
+                }
+            });
+        });
+
+        // --- Desktop hover effects with spectral wisps and horror-love emoji ---
+        const desktopCards = document.querySelectorAll('#desktopGallery .memory-card');
+
+        desktopCards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                createSpectralWisp(this); // Create ghostly effect on hover
+
+                // Add horror-love emoji
+                this.style.setProperty('--hover-emoji-content', `'${getRandomHorrorLoveEmoji()}'`);
+                this.classList.add('show-hover-emoji'); // Add class to trigger ::after visibility
+            });
+
+            card.addEventListener('mouseleave', function() {
+                this.classList.remove('show-hover-emoji'); // Remove class to hide ::after
+            });
+        });
+
+        // --- Create floating spectral wisp animation ---
+        function createSpectralWisp(element) {
+            const wisp = document.createElement('div');
+            wisp.className = 'spectral-wisp';
+            const wispSymbols = ['👻', '✨', '🖤', '💔', '🔮', '🥀', '💫']; // Eerie symbols for wisps
+            wisp.textContent = wispSymbols[Math.floor(Math.random() * wispSymbols.length)];
+
+            const rect = element.getBoundingClientRect();
+            wisp.style.left = (rect.left + Math.random() * rect.width) + 'px';
+            wisp.style.top = rect.top + rect.height / 2 + 'px'; // Start from middle
+            wisp.style.position = 'fixed';
+            wisp.style.zIndex = '1000';
+
+            document.body.appendChild(wisp);
+
+            setTimeout(() => {
+                if (wisp.parentNode) {
+                    wisp.parentNode.removeChild(wisp);
+                }
+            }, 3000); // Matches animation duration
+        }
+
+        // Smooth scroll for carousel (already existing)
+        const carousel = document.getElementById('mobileGallery');
+        if (carousel) {
+            carousel.style.scrollBehavior = 'smooth';
+        }
+
+        // Add shimmer effect periodically to placeholder images
+        setInterval(() => {
+            const placeholderImages = document.querySelectorAll('.memory-image.placeholder');
+            if (placeholderImages.length > 0) {
+                const randomImage = placeholderImages[Math.floor(Math.random() * placeholderImages.length)];
+                randomImage.style.animation = 'none';
+                void randomImage.offsetWidth;
+                randomImage.style.animation = 'shimmer 2s infinite';
+            }
+        }, 3000);
+
+        // Function to help users add photos programmatically
+        function addPhoto(cardIndex, imageUrl) {
+            const desktopImage = document.querySelector(`#desktopGallery .memory-card:nth-child(${cardIndex}) .memory-image`);
+            const mobileImage = document.querySelector(`#mobileGallery .carousel-container .memory-card:nth-child(${cardIndex}) .memory-image`);
+
+            if (desktopImage) {
+                desktopImage.style.backgroundImage = `url('${imageUrl}')`;
+                desktopImage.classList.remove('placeholder');
+                desktopImage.textContent = '';
+                desktopImage.dataset.imageUrl = imageUrl;
+            }
+
+            if (mobileImage) {
+                mobileImage.style.backgroundImage = `url('${imageUrl}')`;
+                mobileImage.classList.remove('placeholder');
+                mobileImage.textContent = '';
+                mobileImage.dataset.imageUrl = imageUrl;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            addPhoto(1, 'bhootni1.png');
+            addPhoto(2, 'bhootni2.png');
+            addPhoto(3, 'bhootni3.png');
+            addPhoto(4, 'bhootni4.png');
+            addPhoto(5, 'bhootni5.png');
+            addPhoto(6, 'bhootni6.png');
+            addPhoto(7, 'bhootni7.png');
+            addPhoto(8, 'bhootni8.png');
+        });
+    </script>
+</body>
+</html>

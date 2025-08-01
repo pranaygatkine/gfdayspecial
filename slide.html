@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enchantments of My Dark Darling - Page 2</title>
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-dark: #1a000d; /* Very dark background */
+            --secondary-mist: #33001a; /* Dark plum */
+            --accent-glow: #ff4500; /* Orange-red for eerie glow */
+            --text-light: #fbecec; /* Pale pink for contrast */
+            --text-highlight: #ff69b4; /* A touch of original pink for 'love' */
+            --card-front-bg: rgba(26, 0, 13, 0.7); /* Darker card front */
+            --card-back-gradient-start: #4a0033; /* Deep plum for card back */
+            --card-back-gradient-end: #800040; /* Darker desaturated pink for card back */
+            --button-bg: #800040; /* Darker pink for button */
+            --button-hover-bg: #4a0033; /* Deep plum for button hover */
+        }
+
+        /* Basic Reset & Box Sizing */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body & Overall Layout */
+        body {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-mist) 100%);
+            min-height: 100vh;
+            font-family: 'Montserrat', sans-serif;
+            /* REMOVED: overflow: hidden; */ /* This was causing the scroll issue! */
+            position: relative;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23ff69b4" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>') 12 12, auto; /* Custom heart cursor */
+            padding: 20px; /* General padding to prevent content from touching edges */
+        }
+
+        /* --- Background Floating Elements (Spectral/Eerie) --- */
+        .floating-elements {
+            position: fixed; /* Keep them fixed in the viewport */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .element {
+            position: absolute;
+            color: var(--accent-glow); /* Eerie glow */
+            font-size: clamp(1rem, 3.5vw, 2.5rem); /* Adjusted clamp for more fluid scaling */
+            animation: floatAndTwist 10s infinite linear;
+            opacity: 0.3;
+            filter: blur(0.5px); /* Soft blur for spectral look */
+            text-shadow: 0 0 5px var(--accent-glow);
+        }
+
+        @keyframes floatAndTwist {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.4; }
+            50% { transform: translateY(50vh) rotate(180deg); opacity: 0.6; }
+            90% { opacity: 0.4; }
+            100% { transform: translateY(-50px) rotate(360deg); opacity: 0; }
+        }
+
+        /* --- Main Container & Title --- */
+        .container {
+            max-width: 1200px;
+            width: 100%; /* Ensure it takes full width on small screens */
+            margin: 0 auto;
+            padding: clamp(2rem, 5vw, 3rem) clamp(1rem, 4vw, 2rem); /* Responsive padding */
+            position: relative;
+            z-index: 2;
+            animation: fadeIn 1s ease-out forwards;
+            min-height: calc(100vh - 40px); /* Adjust based on body padding */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* Pushes button to bottom */
+        }
+        
+        /* Flex grow for main content to push button down if needed */
+        .cards-content-wrapper { /* New wrapper for title + cards-container */
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start; /* Aligns content to top */
+        }
+
+        .page-title {
+            font-family: 'Creepster', cursive;
+            font-size: clamp(2.8rem, 8vw, 5rem); /* Adjusted clamp for mobile */
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: clamp(2.5rem, 6vw, 3.5rem); /* Responsive margin */
+            color: var(--accent-glow);
+            text-shadow: 0 0 15px var(--accent-glow), 0 0 25px rgba(255, 69, 0, 0.6);
+            animation: titlePulse 4s ease-in-out infinite alternate;
+            line-height: 1.1;
+        }
+
+        @keyframes titlePulse {
+            from { filter: drop-shadow(0 0 10px rgba(255, 69, 0, 0.4)); transform: scale(1); }
+            to { filter: drop-shadow(0 0 25px rgba(255, 69, 0, 0.8)); transform: scale(1.02); }
+        }
+
+        /* --- Cards Container --- */
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Min card width for mobile */
+            gap: clamp(1.5rem, 4vw, 2.5rem); /* Responsive gap */
+            margin-bottom: 4rem; /* Ensure space before button */
+            padding: 0; /* No padding here, container handles it */
+            flex-grow: 1; /* Allows grid to take up available space */
+            align-content: start; /* Align content to the top within grid */
+        }
+
+        /* --- Flip Card Styles --- */
+        .flip-card {
+            background-color: transparent;
+            width: 100%;
+            height: clamp(280px, 60vw, 320px); /* Responsive height for cards */
+            perspective: 1000px;
+            animation: popIn 0.8s ease-out forwards;
+            opacity: 0;
+        }
+
+        /* Staggered animation for cards */
+        .flip-card:nth-child(1) { animation-delay: 0.2s; }
+        .flip-card:nth-child(2) { animation-delay: 0.4s; }
+        .flip-card:nth-child(3) { animation-delay: 0.6s; }
+        .flip-card:nth-child(4) { animation-delay: 0.8s; }
+        .flip-card:nth-child(5) { animation-delay: 1.0s; } /* For the 5th card */
+        .flip-card:nth-child(6) { animation-delay: 1.2s; } /* For the 6th card */
+
+        @keyframes popIn {
+            from { opacity: 0; transform: scale(0.8) translateY(30px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Springy effect */
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+
+        .flip-card:hover .flip-card-inner,
+        .flip-card.flipped .flip-card-inner { /* Added .flipped class for mobile */
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: clamp(1.5rem, 4vw, 2.5rem); /* Responsive padding */
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3); /* Stronger shadow */
+            border: 1px solid rgba(128, 0, 64, 0.4); /* Darker border */
+        }
+
+        .flip-card-front {
+            background: var(--card-front-bg);
+            backdrop-filter: blur(8px) brightness(70%); /* Darker blur */
+            color: var(--text-light);
+            transition: transform 0.3s ease-in-out;
+        }
+        .flip-card-front:hover {
+            transform: translateY(-5px); /* Lift effect on hover */
+        }
+
+        .flip-card-back {
+            background: linear-gradient(135deg, var(--card-back-gradient-start) 0%, var(--card-back-gradient-end) 100%);
+            color: var(--text-light);
+            transform: rotateY(180deg);
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
+        }
+
+        .card-emoji {
+            font-size: clamp(2.5rem, 8vw, 4rem); /* Adjusted clamp for mobile */
+            margin-bottom: clamp(0.8rem, 2vw, 1rem); /* Responsive margin */
+            animation: floatBounce 3s infinite alternate; /* More dynamic bounce */
+            color: var(--text-highlight); /* Give emojis some color */
+        }
+
+        @keyframes floatBounce {
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(5deg); }
+            100% { transform: translateY(0) rotate(-5deg); }
+        }
+
+        .card-text {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(1.2rem, 3.8vw, 1.6rem); /* Adjusted clamp for mobile */
+            font-weight: 500;
+            line-height: 1.5;
+            color: var(--text-light);
+        }
+
+        .card-back-content {
+            text-align: center;
+        }
+
+        .back-illustration {
+            font-size: clamp(3rem, 9vw, 5rem); /* Adjusted clamp for mobile */
+            margin-bottom: clamp(1rem, 2.5vw, 1.2rem); /* Responsive margin */
+            animation: spectralPulse 2.5s infinite alternate; /* Eerie pulse */
+            color: var(--accent-glow);
+            text-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        @keyframes spectralPulse {
+            0% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.8; }
+        }
+
+        .back-message {
+            font-family: 'Montserrat', sans-serif;
+            font-size: clamp(1rem, 3vw, 1.2rem); /* Adjusted clamp for mobile */
+            font-style: italic;
+            opacity: 0.9;
+            color: var(--text-light);
+            line-height: 1.4;
+        }
+
+        /* --- Next Button --- */
+        .next-button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: clamp(3rem, 8vw, 4rem); /* Responsive margin */
+            padding-bottom: clamp(1rem, 4vw, 2rem); /* Responsive padding */
+            width: 100%; /* Ensure button container spans full width */
+        }
+
+        .next-button {
+            background: var(--button-bg);
+            color: var(--text-light);
+            border: 2px solid var(--accent-glow); /* Glowing border */
+            padding: clamp(1rem, 3.5vw, 1.2rem) clamp(2rem, 7vw, 3rem); /* Responsive padding */
+            font-size: clamp(1.1rem, 3.5vw, 1.4rem); /* Adjusted clamp for mobile */
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            font-family: 'Cinzel', serif;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.7rem;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+            white-space: nowrap; /* Prevent text wrapping */
+        }
+
+        .next-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        .next-button:hover::before {
+            left: 100%;
+        }
+
+        .next-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(255, 69, 0, 0.4); /* Eerie glow on hover */
+            background: var(--button-hover-bg);
+            border-color: var(--text-highlight); /* More vibrant border on hover */
+        }
+
+        .next-button:active {
+            transform: translateY(-2px);
+        }
+
+        /* Hover hint (more integrated) */
+        .hover-hint {
+            position: absolute;
+            bottom: 10px;
+            font-size: clamp(0.75rem, 2.5vw, 0.9rem); /* Responsive font size */
+            opacity: 0.5;
+            color: var(--text-light);
+            font-style: italic;
+            transition: opacity 0.3s ease;
+        }
+        .flip-card:hover .hover-hint {
+            opacity: 0; /* Fade out hint on hover */
+        }
+        .flip-card.flipped .hover-hint {
+            opacity: 0; /* Fade out hint on flip */
+        }
+
+        /* Custom scrollbar for carousel */
+        .gallery-carousel::-webkit-scrollbar {
+            height: 8px; /* Thicker scrollbar */
+        }
+
+        .gallery-carousel::-webkit-scrollbar-track {
+            background: rgba(255, 69, 0, 0.1); /* Eerie track */
+            border-radius: 4px;
+        }
+
+        .gallery-carousel::-webkit-scrollbar-thumb {
+            background: rgba(255, 69, 0, 0.5); /* Eerie thumb */
+            border-radius: 4px;
+        }
+
+        .gallery-carousel::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 69, 0, 0.7);
+        }
+
+        /* No need for specific @media rules as clamp() and fluid units handle most responsiveness */
+    </style>
+</head>
+<body>
+  <div class="floating-elements" id="floating-elements"></div>
+
+<div class="container">
+    <div class="cards-content-wrapper">
+        <h1 class="page-title">Dark Love Notes for My Ghost Princess 💌👻</h1>
+        
+        <div class="cards-container">
+
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <div class="card-emoji">👁️‍🗨️</div>
+                        <div class="card-text">Your eyes pull me in like magic.</div>
+                        <div class="hover-hint">Tap to see...</div>
+                    </div>
+                    <div class="flip-card-back">
+                        <div class="card-back-content">
+                            <div class="back-illustration">🌌✨</div>
+                            <div class="back-message">When I look into your eyes, I see my whole world.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <div class="card-emoji">👻</div>
+                        <div class="card-text">Your presence feels like a soft ghost hug.</div>
+                        <div class="hover-hint">Feel the sound...</div>
+                    </div>
+                    <div class="flip-card-back">
+                        <div class="card-back-content">
+                            <div class="back-illustration">🎵💀</div>
+                            <div class="back-message">Even when you're quiet, I can feel you around me... like a sweet shadow.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <div class="card-emoji">😈</div>
+                        <div class="card-text">That naughty smile of yours? I’m a fan.</div>
+                        <div class="hover-hint">Wanna know more?</div>
+                    </div>
+                    <div class="flip-card-back">
+                        <div class="card-back-content">
+                            <div class="back-illustration">🕸️❤️</div>
+                            <div class="back-message">You trap me in your cute chaos... and I never want to escape.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <div class="card-emoji">🌙</div>
+                        <div class="card-text">When I’m with you, even darkness feels safe.</div>
+                        <div class="hover-hint">Explore the night...</div>
+                    </div>
+                    <div class="flip-card-back">
+                        <div class="card-back-content">
+                            <div class="back-illustration">🖤</div> 
+                            <div class="back-message">With you, night isn’t scary. It’s peaceful. It’s love.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <div class="card-emoji">⚜️</div>
+                        <div class="card-text">You glow like a queen from another world.</div>
+                        <div class="hover-hint">Step into forever...</div>
+                    </div>
+                    <div class="flip-card-back">
+                        <div class="card-back-content">
+                            <div class="back-illustration">👑✨</div>
+                            <div class="back-message">Time can fade many things… but not your beauty, my queen.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <div class="card-emoji">⛓️</div>
+                        <div class="card-text">Our love is locked — forever and beyond.</div>
+                        <div class="hover-hint">Feel the bond...</div>
+                    </div>
+                    <div class="flip-card-back">
+                        <div class="card-back-content">
+                            <div class="back-illustration">💖🔒</div>
+                            <div class="back-message">No spell, no curse — just our strong love, tied for life.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flip-card">
+    <div class="flip-card-inner">
+        <div class="flip-card-front">
+            <div class="card-emoji">🕯️</div>
+            <div class="card-text">You light up my darkest thoughts.</div>
+            <div class="hover-hint">See the spark...</div>
+        </div>
+        <div class="flip-card-back">
+            <div class="card-back-content">
+                <div class="back-illustration">🔥🖤</div>
+                <div class="back-message">Like a candle in the void, your love brings warmth to my haunted heart.</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="flip-card">
+    <div class="flip-card-inner">
+        <div class="flip-card-front">
+            <div class="card-emoji">🌫️</div>
+            <div class="card-text">You drift into my mind like midnight mist.</div>
+            <div class="hover-hint">Unveil the secret...</div>
+        </div>
+        <div class="flip-card-back">
+            <div class="card-back-content">
+                <div class="back-illustration">💭👁️</div>
+                <div class="back-message">Even in the fog of dreams, your soul finds mine. We’re bound by fate and fantasy.</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+        </div>
+    </div>
+
+    <div class="next-button-container">
+        <a href="pic.html" class="next-button">
+            Dare to See More? ➡️
+        </a>
+    </div>
+</div>
+
+
+    <script>
+        // --- Dynamic Floating Eerie Elements Creation ---
+        function createFloatingElements() {
+            const elementsContainer = document.getElementById('floating-elements');
+            const spookySymbols = ['💀', '🕸️', '🖤', '🥀', '🦇', '🔮', '👻', '⛓️', '🕯️', '🩸', '🕷️', '🦉']; // Expanded list
+            
+            setInterval(() => {
+                const element = document.createElement('div');
+                element.className = 'element';
+                element.textContent = spookySymbols[Math.floor(Math.random() * spookySymbols.length)];
+                element.style.left = Math.random() * 100 + '%';
+                element.style.animationDuration = (Math.random() * 4 + 7) + 's'; // Varied duration
+                element.style.fontSize = (Math.random() * 15 + 18) + 'px'; // Varied size
+                element.style.animationDelay = (Math.random() * 3) + 's'; // Staggered start
+                
+                elementsContainer.appendChild(element);
+                
+                // Remove element after animation
+                setTimeout(() => {
+                    if (element.parentNode) {
+                        element.parentNode.removeChild(element);
+                    }
+                }, parseFloat(element.style.animationDuration) * 1000); // Match timeout to duration
+            }, 1000); // Create more frequently
+        }
+
+        // --- Mobile touch support for cards ---
+        function addMobileSupport() {
+            const cards = document.querySelectorAll('.flip-card');
+            
+            cards.forEach(card => {
+                let isFlipped = false; // Track flip state per card
+                
+                card.addEventListener('click', (e) => { // Use click for both desktop/mobile
+                    const inner = card.querySelector('.flip-card-inner');
+                    
+                    if (!isFlipped) {
+                        inner.style.transform = 'rotateY(180deg)';
+                        card.classList.add('flipped'); // Add class for state
+                        isFlipped = true;
+                    } else {
+                        inner.style.transform = 'rotateY(0deg)';
+                        card.classList.remove('flipped'); // Remove class
+                        isFlipped = false;
+                    }
+                    playCardSound(); // Play sound on click/tap
+                });
+            });
+        }
+
+        // --- Click sound effect for cards ---
+        function playCardSound() {
+            // Replace with a subtle 'whoosh' or 'click' sound effect for eerie vibe
+            // Example: const audio = new Audio('path/to/eerie-flip-sound.mp3');
+            // audio.volume = 0.5; // Adjust volume
+            // audio.play().catch(e => console.log("Sound play prevented:", e));
+        }
+
+        // Initialize animations and mobile support
+        document.addEventListener('DOMContentLoaded', () => {
+            createFloatingElements();
+            addMobileSupport();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Eternal Love... My Haunting Beauty</title>
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-dark: #4a0033; /* Deep plum/maroon */
+            --secondary-mist: #800040; /* Darker, desaturated pink */
+            --accent-glow: #ff4500; /* Orange-red for eerie glow */
+            --text-light: #fbecec; /* Pale pink for contrast */
+            --text-highlight: #ff69b4; /* A touch of original pink for 'love' */
+            --gradient-start: #1a000d; /* Very dark, almost black */
+            --gradient-end: #33001a; /* Dark plum */
+        }
+
+        /* Basic Reset & Box Sizing */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body & Overall Layout - Centering Everything */
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+            font-family: 'Montserrat', sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23ff69b4" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>') 12 12, auto;
+            padding: 20px;
+        }
+
+        /* --- Background Floating Elements (Eerie Mix) --- */
+        .floating-element {
+            position: fixed;
+            font-size: clamp(1.8rem, 4.5vw, 3.5rem);
+            opacity: 0.3;
+            pointer-events: none;
+            animation: floatUpDown 10s ease-in-out infinite, pulseGlow 4s infinite alternate;
+            color: var(--secondary-mist);
+            z-index: 1;
+        }
+
+        /* Distribute floating elements for better mobile visibility */
+        .floating-element:nth-child(1) { top: 10%; left: 5%; animation-delay: 0s; }
+        .floating-element:nth-child(2) { top: 20%; right: 10%; animation-delay: 1s; }
+        .floating-element:nth-child(3) { top: 60%; left: 8%; animation-delay: 2s; }
+        .floating-element:nth-child(4) { top: 70%; right: 15%; animation-delay: 3s; }
+        .floating-element:nth-child(5) { top: 30%; left: 85%; animation-delay: 4s; }
+        .floating-element:nth-child(6) { top: 80%; right: 5%; animation-delay: 5s; }
+        .floating-element:nth-child(7) { top: 15%; left: 70%; animation-delay: 6s; }
+        .floating-element:nth-child(8) { top: 45%; right: 80%; animation-delay: 7s; }
+        .floating-element:nth-child(9) { top: 85%; left: 25%; animation-delay: 8s; }
+        .floating-element:nth-child(10) { top: 5%; right: 40%; animation-delay: 9s; }
+
+        .floating-element:nth-child(even) {
+            animation-delay: -5s;
+            animation-duration: 9s;
+        }
+        .floating-element:nth-child(odd) {
+            animation-delay: -2.5s;
+            animation-duration: 8s;
+        }
+
+        @keyframes floatUpDown {
+            0%, 100% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0.25; }
+            25% { transform: translateY(-30px) translateX(10px) rotate(5deg); opacity: 0.4; }
+            50% { transform: translateY(0px) translateX(0px) rotate(0deg); opacity: 0.25; }
+            75% { transform: translateY(30px) translateX(-10px) rotate(-5deg); opacity: 0.4; }
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { filter: drop-shadow(0 0 5px rgba(255, 69, 0, 0.4)); }
+            50% { filter: drop-shadow(0 0 15px rgba(255, 69, 0, 0.8)); }
+        }
+
+        /* --- Main Container & Typography --- */
+        .container {
+            text-align: center;
+            max-width: 90%;
+            width: 100%;
+            padding: clamp(30px, 8vw, 50px) clamp(20px, 5vw, 30px);
+            background: rgba(26, 0, 13, 0.8);
+            border-radius: 25px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+            z-index: 10;
+            backdrop-filter: blur(10px) brightness(80%);
+            border: 1px solid rgba(128, 0, 64, 0.5);
+            animation: fadeInScale 1.5s ease-out forwards;
+            position: relative;
+            margin: auto;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(255, 69, 0, 0.05) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: -1;
+            animation: pulsateLight 5s infinite alternate;
+        }
+
+        @keyframes pulsateLight {
+            from { opacity: 0.8; transform: scale(1); }
+            to { opacity: 1; transform: scale(1.05); }
+        }
+
+        .main-title {
+            font-family: 'Creepster', cursive;
+            font-size: clamp(3rem, 10vw, 6rem);
+            color: var(--accent-glow);
+            margin-bottom: clamp(1rem, 3vw, 1.5rem);
+            text-shadow: 0 0 20px var(--accent-glow), 0 0 30px rgba(255, 69, 0, 0.6);
+            line-height: 1.1;
+            animation: textFlicker 2s infinite alternate;
+        }
+
+        @keyframes textFlicker {
+            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+                text-shadow: 0 0 20px var(--accent-glow), 0 0 30px rgba(255, 69, 0, 0.6);
+                opacity: 1;
+            }
+            20%, 24%, 55% {
+                text-shadow: none;
+                opacity: 0.8;
+            }
+        }
+
+        .main-heading {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(1.4rem, 5vw, 2.5rem);
+            color: var(--text-light);
+            margin-bottom: clamp(2rem, 6vw, 3rem);
+            line-height: 1.5;
+            font-weight: 400;
+            animation: fadeInUp 2s ease-out forwards;
+            animation-delay: 0.5s;
+            opacity: 0;
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.6);
+        }
+
+        .main-heading strong {
+            font-weight: 700;
+            color: var(--text-highlight);
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .main-heading strong:hover {
+            color: var(--text-highlight);
+        }
+        
+        .main-heading strong::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -5px;
+            width: 100%;
+            height: 2px;
+            background: var(--text-highlight);
+            transform: scaleX(0);
+            transform-origin: bottom right;
+            transition: transform 0.4s ease-out;
+        }
+
+        .container:hover .main-heading strong::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+
+        /* --- Button Styling --- */
+        .journey-btn {
+            background: var(--primary-dark);
+            border: 2px solid var(--secondary-mist);
+            border-radius: 50px;
+            /* Use clamp to ensure responsive padding and font size */
+            padding: clamp(12px, 3.5vw, 20px) clamp(25px, 7vw, 50px);
+            font-size: clamp(1rem, 3.5vw, 1.5rem);
+            font-family: 'Cinzel', serif;
+            font-weight: 600;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            animation: fadeInUp 2.5s ease-out forwards;
+            animation-delay: 1s;
+            text-decoration: none;
+            display: inline-block;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+            
+            /* --- THIS IS THE MAIN FIX --- */
+            white-space: nowrap; /* Default for larger screens */
+            text-align: center;
+        }
+
+        .journey-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(255, 69, 0, 0.3), transparent);
+            transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        .journey-btn:hover::before {
+            left: 100%;
+        }
+
+        .journey-btn:hover {
+            background: var(--secondary-mist);
+            border-color: var(--accent-glow);
+            box-shadow: 0 15px 40px rgba(255, 69, 0, 0.4);
+            transform: translateY(-7px) scale(1.03);
+            color: var(--text-light);
+        }
+        .journey-btn:active {
+            transform: translateY(-3px) scale(0.97);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* --- New Media Query for Small Devices --- */
+        @media (max-width: 600px) {
+            .journey-btn {
+                white-space: normal; /* Allows text to wrap to the next line */
+                line-height: 1.2; /* Better spacing between wrapped lines */
+                /* Optional: Adjust padding for a cleaner look */
+                padding: 12px 20px;
+            }
+        }
+        /* --- End of New Media Query --- */
+
+
+        /* --- Dynamic Hearts (now more like spectral wisps/souls) --- */
+        .heart {
+            position: fixed;
+            color: var(--text-highlight);
+            font-size: clamp(1.2rem, 3.5vw, 2.5rem);
+            animation: floatAndFade 6s linear infinite;
+            opacity: 0;
+            text-shadow: 0 0 8px rgba(255, 105, 180, 0.6);
+            filter: blur(0.5px);
+        }
+
+        @keyframes floatAndFade {
+            0% { opacity: 0; transform: translateY(100vh) scale(0.5) rotate(0deg); }
+            10% { opacity: 0.6; transform: translateY(90vh) scale(1) rotate(10deg); }
+            90% { opacity: 0.6; transform: translateY(10vh) scale(1) rotate(-10deg); }
+            100% { opacity: 0; transform: translateY(-20vh) scale(0.5) rotate(0deg); }
+        }
+
+        /* --- Sparkles (now more like faint embers or dust) --- */
+        .sparkle {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background: var(--accent-glow);
+            border-radius: 50%;
+            box-shadow: 0 0 6px var(--accent-glow);
+            animation: emberFade 2.5s linear infinite;
+            opacity: 0;
+            filter: blur(0.8px);
+        }
+
+        @keyframes emberFade {
+            0%, 100% { opacity: 0; transform: scale(0); }
+            50% { opacity: 0.8; transform: scale(1); }
+        }
+
+        /* --- Entrance Animations --- */
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.7); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+<div class="floating-element">💀</div>
+<div class="floating-element">🕸️</div>
+<div class="floating-element">🖤</div>
+<div class="floating-element">🥀</div>
+<div class="floating-element">🦇</div>
+<div class="floating-element">🔮</div>
+<div class="floating-element">💖</div>
+<div class="floating-element">👻</div>
+<div class="floating-element">⛓️</div>
+<div class="floating-element">🕯️</div>
+
+<div class="container">
+    <h1 class="main-title">My Forever Love... My Magical Mystery 💀💖</h1>
+    
+    <div class="main-heading">
+        To the most beautiful Haunted Princess 🖤<br>
+        Can you feel the magic in the dark? ✨<br>
+        It’s Girlfriend’s Day, and I made this spooky love surprise just for YOU! 🥀👻
+    </div>
+    
+    <button class="journey-btn" onclick="startJourney()">
+        Begin Our Haunted Love Story 🔮
+    </button>
+</div>
+
+<audio id="bgMusic" loop>
+    <source src="path/to/your/eerie_romantic_music.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
+
+<script>
+    // --- Dynamic Floating Hearts (now more like spectral wisps) Creation ---
+    function createHeart() {
+        const heart = document.createElement('div');
+        heart.className = 'heart';
+        const spookyHearts = ['🖤', '🥀', '💔', '✨'];
+        heart.innerHTML = spookyHearts[Math.floor(Math.random() * spookyHearts.length)];
+        heart.style.left = Math.random() * 100 + 'vw';
+        heart.style.animationDelay = Math.random() * 3 + 's';
+        heart.style.animationDuration = (5 + Math.random() * 3) + 's';
+        document.body.appendChild(heart);
+
+        setTimeout(() => {
+            heart.remove();
+        }, 8000);
+    }
+
+    // --- Dynamic Sparkles (now faint embers) Creation ---
+    function createSparkle() {
+        const sparkle = document.createElement('div');
+        sparkle.className = 'sparkle';
+        sparkle.style.left = Math.random() * 100 + 'vw';
+        sparkle.style.top = Math.random() * 100 + 'vh';
+        sparkle.style.animationDelay = Math.random() * 2 + 's';
+        sparkle.style.animationDuration = (2 + Math.random() * 1.5) + 's';
+        document.body.appendChild(sparkle);
+
+        setTimeout(() => {
+            sparkle.remove();
+        }, 3500);
+    }
+
+    // Start continuous animations
+    setInterval(createHeart, 700);
+    setInterval(createSparkle, 400);
+
+    // --- Button Click Function ---
+    function startJourney() {
+        const btn = document.querySelector('.journey-btn');
+        btn.style.transform = 'scale(0.9)';
+        
+        const audio = document.getElementById('bgMusic');
+        if (audio) {
+            audio.volume = 0.3;
+            audio.play().catch(e => {
+                console.log('Autoplay prevented:', e);
+            });
+        }
+
+        setTimeout(() => {
+            btn.style.transform = 'translateY(-7px) scale(1.03)';
+            window.location.href = 'slide.html';
+        }, 200);
+    }
+
+    // --- Interactive Sparkles on Mouse Move (More like dust motes) ---
+    document.addEventListener('mousemove', (e) => {
+        if (Math.random() > 0.85) {
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+            sparkle.style.left = e.clientX + 'px';
+            sparkle.style.top = e.clientY + 'px';
+            sparkle.style.position = 'fixed';
+            sparkle.style.animationDuration = '1.2s';
+            sparkle.style.animationIterationCount = '1';
+            document.body.appendChild(sparkle);
+
+            setTimeout(() => {
+                sparkle.remove();
+            }, 1200);
+        }
+    });
+
+    // --- Initial floating element animation variety ---
+    document.querySelectorAll('.floating-element').forEach((el, index) => {
+        el.style.animationDelay = (index * 0.4) + 's';
+        el.style.animationDuration = (7 + Math.random() * 5) + 's';
+        el.style.left = Math.random() * 90 + 'vw';
+        el.style.top = Math.random() * 90 + 'vh';
+    });
+
+    // Handle music autoplay policy on load
+    window.addEventListener('load', () => {
+        const audio = document.getElementById('bgMusic');
+        if (audio && audio.paused) {
+            console.log("Audio is paused. User interaction may be needed to play music.");
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Pact Sealed in Shadow... For Eternity?</title>
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-dark: #0d0006; /* Even darker background */
+            --secondary-mist: #260013; /* Darker plum/maroon */
+            --accent-glow: #ff4500; /* Orange-red for eerie glow */
+            --text-light: #fbecec; /* Pale pink for contrast */
+            --text-highlight: #ff69b4; /* A touch of original pink for 'love' */
+            --popup-bg: rgba(26, 0, 13, 0.9); /* Dark, slightly transparent popup */
+            --popup-border-glow: linear-gradient(45deg, #cc0066, #ff0077, #ff66b2, #ff99cc); /* Darker, more intense glow */
+            --yes-btn-bg: #800040; /* Darker, desaturated pink for Yes */
+            --yes-btn-hover: #4a0033; /* Deep plum for Yes hover */
+            --no-btn-bg: #4a0033; /* Deep plum for No */
+            --no-btn-hover: #2e0017; /* Even darker plum for No hover */
+            --success-bg: rgba(0, 0, 0, 0.95); /* Nearly black success background */
+        }
+
+        /* Basic Reset & Box Sizing */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body & Overall Layout */
+        body {
+            font-family: 'Montserrat', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-mist) 100%);
+            position: relative;
+            /* REMOVED: overflow-x: hidden; */ /* Ensures proper scrolling if content exceeds height */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23ff69b4" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>') 12 12, auto; /* Custom heart cursor */
+            padding: 20px; /* General padding to prevent content from touching edges */
+        }
+
+        /* Floating eerie elements background */
+        .floating-eerie {
+            position: fixed; /* Keep elements fixed in viewport */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1; /* Behind content */
+        }
+
+        .eerie-element {
+            position: absolute;
+            font-size: clamp(1.8rem, 4.5vw, 3.5rem); /* Adjusted clamp for fluid scaling */
+            color: var(--accent-glow);
+            opacity: 0.2;
+            animation: floatTwist 10s linear infinite, pulseGlow 4s infinite alternate;
+            filter: blur(0.5px);
+            text-shadow: 0 0 8px rgba(255, 69, 0, 0.5);
+        }
+
+        .eerie-element:nth-child(even) { animation-delay: -5s; animation-duration: 9s; }
+        .eerie-element:nth-child(odd) { animation-delay: -2.5s; animation-duration: 8s; }
+
+        @keyframes floatTwist {
+            0%, 100% { transform: translateY(0) translateX(0) rotate(0deg); }
+            25% { transform: translateY(-30px) translateX(15px) rotate(10deg); }
+            50% { transform: translateY(0px) translateX(0px) rotate(0deg); }
+            75% { transform: translateY(30px) translateX(-15px) rotate(-10deg); }
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { filter: drop-shadow(0 0 5px rgba(255, 69, 0, 0.4)); opacity: 0.2; }
+            50% { filter: drop-shadow(0 0 20px rgba(255, 69, 0, 0.8)); opacity: 0.4; }
+        }
+
+        /* Main container */
+        .container {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            max-width: 550px;
+            width: 100%; /* Ensure it takes full width on small screens */
+            margin: auto; /* Center content vertically and horizontally */
+            padding: clamp(20px, 5vw, 30px); /* Responsive padding for the container */
+        }
+
+        /* Title */
+        .title {
+            font-family: 'Creepster', cursive;
+            font-size: clamp(3rem, 10vw, 5rem); /* Adjusted clamp for mobile */
+            font-weight: 700;
+            color: var(--accent-glow);
+            margin-bottom: clamp(1.5rem, 5vw, 2.5rem); /* Responsive margin */
+            text-shadow: 0 0 20px var(--accent-glow), 0 0 30px rgba(255, 69, 0, 0.6);
+            animation: textFlicker 2s infinite alternate;
+        }
+
+        @keyframes textFlicker {
+            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+                text-shadow: 0 0 20px var(--accent-glow), 0 0 30px rgba(255, 69, 0, 0.6);
+                opacity: 1;
+            }
+            20%, 24%, 55% {
+                text-shadow: none;
+                opacity: 0.8;
+            }
+        }
+
+        /* Popup box */
+        .popup {
+            background: var(--popup-bg);
+            backdrop-filter: blur(12px) brightness(70%); /* Stronger, darker blur */
+            border-radius: 25px;
+            padding: clamp(2.5rem, 8vw, 3.5rem) clamp(1.5rem, 5vw, 2.5rem); /* Responsive padding */
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+            border: 1px solid var(--card-border); /* Darker border */
+            position: relative;
+            /* REMOVED: animation: popupEntrance 1s ease-out; transform: scale(0.9); opacity: 0; */
+            /* The initial state should be visible, and the animation starts implicitly. */
+            /* Add this class via JS if you want to explicitly trigger an entrance on load. */
+            /* To fix the quick disappear: remove initial transform/opacity and use display: none for success message initially */
+            will-change: transform, opacity;
+        }
+
+        /* Initial state of the popup. It should be visible when the page loads. */
+        /* If you still want an entrance animation, you can apply it via JS after load. */
+        /* For example, add .show class to popup via JS after page load */
+        .popup.entrance-anim { /* Use a class for animation, applied by JS on load */
+            animation: popupEntrance 1s ease-out forwards;
+            transform: scale(0.9); /* Start scale, animation brings it to scale(1) */
+            opacity: 0; /* Start hidden */
+        }
+        @keyframes popupEntrance {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+
+        .popup::before {
+            content: '';
+            position: absolute;
+            top: -15px; /* Larger glowing border */
+            left: -15px;
+            right: -15px;
+            bottom: -15px;
+            background: var(--popup-border-glow);
+            border-radius: 35px;
+            z-index: -1;
+            opacity: 0.4; /* Stronger glow */
+            filter: blur(8px); /* More blur for ethereal glow */
+            animation: borderGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes borderGlow {
+            0%, 100% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.03); }
+        }
+
+        .question {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(1.6rem, 5vw, 2.2rem); /* Adjusted clamp for mobile */
+            font-weight: 500;
+            color: var(--text-light);
+            margin-bottom: clamp(2rem, 6vw, 3rem); /* Responsive margin */
+            line-height: 1.5;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
+        }
+
+        .question strong {
+            color: var(--text-highlight);
+        }
+
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: clamp(0.8rem, 3vw, 1.2rem); /* Responsive gap */
+            align-items: center;
+        }
+
+        .btn {
+            padding: clamp(1rem, 4vw, 1.2rem) clamp(2rem, 7vw, 3rem); /* Responsive padding */
+            border: none;
+            border-radius: 50px;
+            font-size: clamp(1rem, 3vw, 1.2rem); /* Adjusted clamp for mobile */
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+            min-width: clamp(250px, 70vw, 280px); /* Responsive min-width for buttons */
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 0.5px;
+            font-family: 'Montserrat', sans-serif;
+            white-space: nowrap; /* Prevent text wrapping */
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-yes {
+            background: var(--yes-btn-bg);
+            color: var(--text-light);
+            box-shadow: 0 10px 30px rgba(255, 105, 180, 0.4);
+            border: 2px solid var(--text-highlight);
+        }
+
+        .btn-yes:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(255, 105, 180, 0.6);
+            background: var(--yes-btn-hover);
+            border-color: var(--accent-glow);
+        }
+
+        .btn-no {
+            background: var(--no-btn-bg);
+            color: var(--text-light);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            border: 2px solid var(--secondary-mist);
+        }
+
+        .btn-no:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+            background: var(--no-btn-hover);
+            border-color: var(--accent-glow);
+        }
+
+        /* Shake animation (more pronounced) */
+        .shake {
+            animation: shake 0.6s cubic-bezier(.36,.07,.19,.97) both;
+            transform: translate3d(0, 0, 0);
+            backface-visibility: hidden;
+            perspective: 1000px;
+        }
+
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
+
+        /* Success message */
+        .success-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--success-bg);
+            backdrop-filter: blur(20px) brightness(50%); /* Intense dark blur */
+            padding: clamp(3rem, 10vw, 4rem); /* Responsive padding */
+            border-radius: 30px;
+            text-align: center;
+            z-index: 1000;
+            box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+            display: none; /* Hidden by default, shown on click */
+            animation: successAppear 1s ease-out forwards;
+            border: 2px solid var(--accent-glow); /* Glowing border */
+            will-change: transform, opacity;
+            max-width: 90vw; /* Prevent overflow on tiny screens */
+        }
+
+        @keyframes successAppear {
+            0% { transform: translate(-50%, -50%) scale(0.7); opacity: 0; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+
+        .success-text {
+            font-family: 'Creepster', cursive;
+            font-size: clamp(2rem, 6vw, 3rem); /* Adjusted clamp for mobile */
+            color: var(--accent-glow);
+            font-weight: 700;
+            margin-bottom: clamp(1rem, 4vw, 1.5rem); /* Responsive margin */
+            text-shadow: 0 0 10px var(--accent-glow), 0 0 20px rgba(255, 69, 0, 0.6);
+            line-height: 1.2;
+            animation: textFlicker 1.5s infinite alternate; /* Flicker for success text too */
+        }
+
+        .success-quote {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(1.2rem, 4.5vw, 1.8rem); /* Adjusted clamp for mobile */
+            color: var(--text-light);
+            font-style: italic;
+            margin-top: clamp(1rem, 4vw, 1.5rem); /* Responsive margin */
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+        }
+
+        /* Eerie sparks (replacing fireworks) */
+        .eerie-spark {
+            position: fixed; /* Fixed position for scrolling background */
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        .eerie-spark-particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            border-radius: 50%;
+            background: var(--accent-glow);
+            box-shadow: 0 0 5px var(--accent-glow);
+            animation: eerieSparkParticle 2s ease-out forwards;
+        }
+
+        @keyframes eerieSparkParticle {
+            0% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.5); }
+        }
+
+        /* Spectral hearts (replacing heart particles) */
+        .spectral-heart-particle {
+            position: fixed; /* Fixed position for scrolling background */
+            pointer-events: none;
+            color: var(--text-highlight); /* Retain some pink for love */
+            font-size: clamp(1rem, 3.5vw, 2rem); /* Adjusted clamp for mobile */
+            z-index: 999;
+            opacity: 0.8;
+            filter: blur(0.5px);
+            animation: spectralFloat 3s ease-out forwards;
+            text-shadow: 0 0 8px var(--text-highlight);
+        }
+
+        @keyframes spectralFloat {
+            0% { opacity: 0.8; transform: translateY(0) scale(1) rotate(0deg); }
+            100% { opacity: 0; transform: translateY(-150px) scale(0.6) rotate(360deg); }
+        }
+
+        /* No need for specific @media rules as clamp() and fluid units handle most responsiveness */
+    </style>
+</head>
+<body>
+    <div class="floating-eerie" id="floatingEerie">
+        <div class="eerie-element" style="top: 10%; left: 5%;">🦇</div>
+        <div class="eerie-element" style="top: 20%; right: 10%;">🕷️</div>
+        <div class="eerie-element" style="top: 60%; left: 8%;">🖤</div>
+        <div class="eerie-element" style="top: 70%; right: 15%;">🥀</div>
+        <div class="eerie-element" style="top: 30%; left: 85%;">👻</div>
+        <div class="eerie-element" style="top: 80%; right: 5%;">🔮</div>
+        <div class="eerie-element" style="top: 15%; left: 70%;">💀</div>
+        <div class="eerie-element" style="top: 45%; right: 80%;">✨</div>
+        <div class="eerie-element" style="top: 85%; left: 25%;">🕯️</div>
+        <div class="eerie-element" style="top: 5%; right: 40%;">💖</div> 
+    </div>
+
+    <div class="container">
+        <h1 class="title">A Pact Sealed in Shadow...</h1>
+        
+        <div class="popup" id="popup">
+            <div class="question">
+                My **Phantom Queen**, will you forever haunt my dreams and bind our souls in eternal love? 💍🖤
+            </div>
+            
+            <div class="buttons">
+                <button class="btn btn-yes" id="yesBtn">
+                    ✅ Yes, My Dark Love!
+                </button>
+                <button class="btn btn-no" id="noBtn">
+                    ❌ Never... (Try again, mortal) 😉
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="success-message" id="successMessage">
+        <div class="success-text">
+            Our Eternity Begins! 🖤🔮
+        </div>
+        <div class="success-quote">
+            "Happy Girlfriend's Day, my immortal beloved." ✨
+        </div>
+    </div>
+
+    <script>
+        // --- Create floating eerie background elements ---
+        function createFloatingEerieElements() {
+            const elementsContainer = document.getElementById('floatingEerie');
+            const eerieEmojis = ['🦇', '🕷️', '🖤', '🥀', '👻', '🔮', '💀', '✨', '🕯️', '💖', '⛓️', '🦉']; // More variety
+            
+            for (let i = 0; i < 20; i++) { // More elements for denser effect
+                const element = document.createElement('div');
+                element.className = 'eerie-element';
+                element.textContent = eerieEmojis[Math.floor(Math.random() * eerieEmojis.length)];
+                element.style.left = Math.random() * 100 + '%';
+                element.style.top = Math.random() * 100 + '%';
+                element.style.animationDelay = Math.random() * 8 + 's'; // Longer delay range
+                element.style.animationDuration = (Math.random() * 5 + 7) + 's'; // Longer duration range
+                elementsContainer.appendChild(element);
+            }
+        }
+
+        // --- Create eerie sparks (replacing fireworks) ---
+        function createEerieSpark(x, y) {
+            const colors = ['#ff4500', '#ff8c00', '#ff0000', '#cc0000']; // Darker, fiery colors
+            const sparkContainer = document.createElement('div');
+            sparkContainer.className = 'eerie-spark';
+            sparkContainer.style.left = x + 'px';
+            sparkContainer.style.top = y + 'px';
+            document.body.appendChild(sparkContainer);
+
+            for (let i = 0; i < 25; i++) { // More particles for a richer burst
+                const particle = document.createElement('div');
+                particle.className = 'eerie-spark-particle';
+                particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                
+                const angle = (i * (360 / 25)) * Math.PI / 180;
+                const velocity = Math.random() * 80 + 40; // Adjusted velocity
+                const dx = Math.cos(angle) * velocity;
+                const dy = Math.sin(angle) * velocity;
+                
+                particle.style.transform = `translate(${dx}px, ${dy}px)`;
+                particle.style.animationDelay = (Math.random() * 0.3) + 's'; // Staggered particle animation
+                sparkContainer.appendChild(particle);
+            }
+
+            setTimeout(() => {
+                if(sparkContainer.parentNode) sparkContainer.parentNode.removeChild(sparkContainer);
+            }, 2000); // Matches animation duration
+        }
+
+        // --- Create spectral heart particles ---
+        function createSpectralHeartParticles() {
+            const heartEmojis = ['🖤', '🥀', '🔮', '✨', '💖']; // Eerie heart mix
+            
+            for (let i = 0; i < 20; i++) { // More particles
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'spectral-heart-particle';
+                    heart.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+                    heart.style.left = Math.random() * window.innerWidth + 'px';
+                    heart.style.top = window.innerHeight + 'px'; // Start from bottom
+                    heart.style.animationDuration = (Math.random() * 2 + 2.5) + 's'; // Varied duration
+                    heart.style.fontSize = (Math.random() * 10 + 15) + 'px'; // Varied size
+                    document.body.appendChild(heart);
+                    
+                    setTimeout(() => {
+                        if(heart.parentNode) heart.parentNode.removeChild(heart);
+                    }, parseFloat(heart.style.animationDuration) * 1000); // Match timeout to duration
+                }, i * 150); // Staggered appearance
+            }
+        }
+
+        // --- Launch multiple eerie sparks ---
+        function launchEerieSparks() {
+            for (let i = 0; i < 5; i++) { // Fewer, but larger bursts
+                setTimeout(() => {
+                    const x = Math.random() * window.innerWidth;
+                    const y = Math.random() * window.innerHeight * 0.5 + 100; // Upper half
+                    createEerieSpark(x, y);
+                }, i * 400); // Staggered launches
+            }
+        }
+
+        // --- Button event listeners ---
+        document.getElementById('yesBtn').addEventListener('click', function() {
+            document.getElementById('popup').style.display = 'none';
+            document.getElementById('successMessage').style.display = 'block';
+            
+            launchEerieSparks(); // Launch sparks
+            createSpectralHeartParticles(); // Create spectral hearts
+            
+            // More sparks after delay
+            setTimeout(launchEerieSparks, 1000);
+            setTimeout(createSpectralHeartParticles, 1500);
+        });
+
+        document.getElementById('noBtn').addEventListener('click', function() {
+            const popup = document.getElementById('popup');
+            popup.classList.add('shake');
+            
+            setTimeout(() => {
+                popup.classList.remove('shake');
+            }, 600); // Matches shake animation duration
+            
+            const question = popup.querySelector('.question');
+            const originalText = "My **Phantom Queen**, will you forever haunt my dreams and bind our souls in eternal love? 💍🖤";
+            
+            // Playful refusal text
+            question.innerHTML = 'Ah, a formidable spirit! 😉 But I shall not yield.<br><small style="font-size: 0.8em; opacity: 0.7; font-family: \'Montserrat\', sans-serif;">Perhaps a deeper spell is needed... Try again, my dear.</small>';
+            
+            setTimeout(() => {
+                question.innerHTML = originalText;
+            }, 3000); // Longer delay to read the playful refusal
+        });
+
+        // Initialize eerie background elements on load
+        document.addEventListener('DOMContentLoaded', () => {
+            createFloatingEerieElements();
+            // Apply entrance animation class to popup on load
+            const popup = document.getElementById('popup');
+            popup.classList.add('entrance-anim');
+            // Ensure it's not display:none initially. It will fade in.
+            popup.style.display = 'block'; 
+        });
+
+        // Periodically launch subtle eerie sparks in background
+        setInterval(() => {
+            if (Math.random() > 0.8) { // Less frequent, more subtle
+                const x = Math.random() * window.innerWidth;
+                const y = Math.random() * window.innerHeight;
+                createEerieSpark(x, y);
+            }
+        }, 4000); // Longer interval for background sparks
+    </script>
+</body>
+</html>
